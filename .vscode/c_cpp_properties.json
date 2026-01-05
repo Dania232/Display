@@ -1,0 +1,31 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**", 
+                "/usr/lib/gcc/avr/14.2.0/include"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c17",
+            "cppStandard": "gnu++17",
+            "intelliSenseMode": "linux-gcc-x64"
+        }, 
+        {
+            "name": "AVR",
+            "includePath": [
+                "${workspaceFolder}/**", 
+                "/usr/lib/gcc/avr/14.2.0/include"
+            ],
+            "defines": [
+                "__AVR_ATmega328PB__"
+            ],
+            "compilerPath": "/usr/bin/avr-gcc",
+            "cStandard": "c17",
+            "cppStandard": "gnu++17",
+            "intelliSenseMode": "linux-gcc-x64"
+        }
+    ],
+    "version": 4
+}
