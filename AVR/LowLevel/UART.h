@@ -1,5 +1,6 @@
 //cat /dev/ttyUSB0
 // stty -F /dev/ttyUSB0 9600 raw -echo
+// stty -F /dev/ttyUSB0 -hupcl
 
 #ifndef MY_UART
 #define MY_UART

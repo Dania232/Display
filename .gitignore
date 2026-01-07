@@ -2,3 +2,7 @@
 *.elf
 *.hex
 *.png
+main
+show
+flush
+pr.txt
