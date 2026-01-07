@@ -38,8 +38,8 @@ void Display::my_init()
     _delay_ms(5);
 }
 
-
-void Display::init() {
+void Display::init()
+{
     // ----- Display OFF -----
     command(SSD1306_DISPLAYOFF);
 
@@ -161,5 +161,18 @@ void Display::command(uint8_t c, uint8_t op1, uint8_t op2)
     i2c_write_byte(op1);
     i2c_write_byte(ctrCommandComing);
     i2c_write_byte(op2);
+    i2c_end();
+}
+
+void Display::write_bytes(uint8_t *bytes, uint16_t len)
+{
+    command(SSD1306_COLUMNADDR, 0, 127);
+    command(SSD1306_PAGEADDR, 0, 7);
+    i2c_begin(SSD1306_ADDR);
+    i2c_write_byte(ctrDataOnlyComing);
+    for (uint16_t i = 0; i < len; i++)
+    {
+        i2c_write_byte(bytes[i]);
+    }
     i2c_end();
 }
