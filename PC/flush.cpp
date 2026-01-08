@@ -6,6 +6,22 @@
 #include <termios.h>
 #include <sys/ioctl.h>
 
+int reform(std::vector<uint8_t> &vec, int H, int W){
+    std::vector<uint8_t> buffer(H * (W / 8));
+
+    for (int col_ind = 0; col_ind < W; col_ind++)
+    {
+        for (int row_ind = 0; row_ind < H; row_ind++)
+        {
+            bool val;
+            val = vec[col_ind / 8 + row_ind*W/8] & (1 << (col_ind % 8));
+            buffer[row_ind / 8 + col_ind*H/8] |= (val << (row_ind % 8));
+        }
+    }
+    vec = buffer;
+    return 0;
+}
+
 int main()
 {
     const char *port = "/dev/ttyUSB0";
@@ -16,7 +32,6 @@ int main()
     const int W = 128;
     const int H = 64;
     std::vector<uint8_t> buffer(H * (W / 8));
-    std::vector<uint8_t> buffer_out(H * (W / 8));
 
     // read all bytes from stdin
     size_t total_read = 0;
@@ -34,43 +49,17 @@ int main()
         return 1;
     }
 
-    for (int col_ind = 0; col_ind < W; col_ind++)
-    {
-        for (int row_ind = 0; row_ind < H; row_ind++)
-        {
-            bool val;
-            val = buffer[col_ind / 8 + row_ind*W/8] & (1 << (col_ind % 8));
-            std::cout << val;
-            buffer_out[row_ind / 8 + col_ind*H/8] |= (val << (row_ind % 8));
-        }
-    }
-
-    // for (int col = 0; col < W; col++)
+    // for (int col_ind = 0; col_ind < W; col_ind++)
     // {
-    //     for (int row = 0; row < H; row++)
+    //     for (int row_ind = 0; row_ind < H; row_ind++)
     //     {
-    //         // extract pixel from row-major input
-    //         bool val = (buffer[row * (W / 8) + col / 8] >> (col % 8)) & 1;
-
-    //         // place pixel in correct byte of column-major output
-    //         buffer_out[col * (H / 8) + row / 8] |= (val << (row % 8));
+    //         bool val;
+    //         val = buffer[col_ind / 8 + row_ind*W/8] & (1 << (col_ind % 8));
+    //         buffer_out[row_ind / 8 + col_ind*H/8] |= (val << (row_ind % 8));
     //     }
     // }
 
-    // for (int col = 0; col < W; col++)
-    // {
-    //     for (int page = 0; page < H / 8; page++)
-    //     {
-    //         uint8_t byte = 0;
-    //         for (int bit = 0; bit < 8; bit++)
-    //         {
-    //             int row = page * 8 + bit;
-    //             bool val = (buffer[row * (W / 8) + col / 8] >> (col % 8)) & 1;
-    //             byte |= (val << bit);
-    //         }
-    //         buffer_out[col * (H / 8) + page] = byte; // assign full byte
-    //     }
-    // }
+    reform(buffer, H, W);
 
     termios t{};
     tcgetattr(fd, &t);
@@ -82,6 +71,7 @@ int main()
     t.c_cflag &= ~PARENB;
     t.c_cflag &= ~CSTOPB;
     t.c_cflag &= ~CSIZE;
+    t.c_cflag &= ~HUPCL;
     t.c_cflag |= CS8;
 
     t.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);
@@ -95,7 +85,7 @@ int main()
     flags |= TIOCM_DTR | TIOCM_RTS;
     ioctl(fd, TIOCMSET, &flags);
 
-    write(fd, buffer_out.data(), buffer.size());
+    write(fd, buffer.data(), buffer.size());
     tcdrain(fd); // wait until transmitted
 
     close(fd);

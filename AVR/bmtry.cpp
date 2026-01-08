@@ -29,7 +29,7 @@ int main(void)
     Display display;
     uint16_t l = 1024;
     uint8_t pixs[l];
-
+    display.clear();
     while (1)
     {
         for (int i = 0; i < l; i++)

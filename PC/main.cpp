@@ -16,11 +16,11 @@ int main(int argc, char *argv[])
     const int W = 128;
     const int H = 64;
 
-    uint8_t threshold = 70;
+    uint8_t threshold = 100;
 
     std::vector<uint8_t> resized(W * H);
     std::vector<uint8_t> formated(128 * 8, 0);
-    if (argc < 2 || argc > 2)
+    if (argc < 2)
     {
         std::cerr << "Usage: " << argv[0] << "image.png\n";
     }
@@ -32,10 +32,29 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+
+    // flag check 
+
+
+    for (int i = 1; i < argc; i++) {
+        if (std::string(argv[i]) == "-th" && i + 1 < argc) {
+            threshold = std::stoi(argv[i + 1]);
+            i++;
+        }
+    }
+
+    if (threshold == 0){
+        threshold = 90;
+    }
+
+    //////
+
+
     stbir_resize_uint8_linear(
         img, w, h, 0,
         resized.data(), W, H, 0,
-        STBIR_1CHANNEL);
+        STBIR_1CHANNEL
+    );
 
     for (int row_ind = 0; row_ind < H; row_ind++)
     { // row
