@@ -9,13 +9,13 @@
 #define STB_IMAGE_RESIZE_IMPLEMENTATION
 #include "stb_image_resize2.h"
 
+int reform(char *im, std::vector<uint8_t> &formated, int W, int H, int threshold);
+
 int main(int argc, char *argv[])
 {
 
-    int w, h, channels;
     const int W = 128;
     const int H = 64;
-
     uint8_t threshold = 100;
 
     std::vector<uint8_t> resized(W * H);
@@ -24,37 +24,45 @@ int main(int argc, char *argv[])
     {
         std::cerr << "Usage: " << argv[0] << "image.png\n";
     }
-    uint8_t *img = stbi_load(argv[1], &w, &h, &channels, 1);
 
+    // flag check
+    for (int i = 1; i < argc; i++)
+    {
+        if (std::string(argv[i]) == "-th" && i + 1 < argc)
+        {
+            threshold = std::stoi(argv[i + 1]);
+            i++;
+        }
+    }
+
+    if (threshold == 0)
+    {
+        threshold = 90;
+    }
+    //////
+
+    char *scr_img = argv[1];
+    reform(scr_img, formated, W, H, threshold);
+    write(1, formated.data(), formated.size());
+    fflush(stdout);
+    return 0;
+}
+
+int reform(char *im, std::vector<uint8_t> &formated, int W, int H, int threshold)
+{
+    std::vector<uint8_t> resized(W * H);
+    int w, h, channels;
+    uint8_t *img = stbi_load(im, &w, &h, &channels, 1);
     if (!img)
     {
         std::cerr << "image load error\n";
         return 1;
     }
 
-
-    // flag check 
-
-
-    for (int i = 1; i < argc; i++) {
-        if (std::string(argv[i]) == "-th" && i + 1 < argc) {
-            threshold = std::stoi(argv[i + 1]);
-            i++;
-        }
-    }
-
-    if (threshold == 0){
-        threshold = 90;
-    }
-
-    //////
-
-
     stbir_resize_uint8_linear(
         img, w, h, 0,
         resized.data(), W, H, 0,
-        STBIR_1CHANNEL
-    );
+        STBIR_1CHANNEL);
 
     for (int row_ind = 0; row_ind < H; row_ind++)
     { // row
@@ -69,15 +77,6 @@ int main(int argc, char *argv[])
             }
         }
     }
-
-    // for (int i = 0; i < formated.size(); i++){
-    //     formated[i] = 0xFF;
-    //     //formated[i] = 0x0;
-    // }
-
     stbi_image_free(img);
-    // std::cout << formated.size() << std::endl;
-    write(1, formated.data(), formated.size());
-    fflush(stdout);
     return 0;
 }
