@@ -1,52 +1,14 @@
 #include <iostream>
 #include <vector>
 #include <cstdint>
-#include <unistd.h>
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+#include "../../libs/stb_image.h"
 
 #define STB_IMAGE_RESIZE_IMPLEMENTATION
-#include "stb_image_resize2.h"
+#include "../../libs/stb_image_resize2.h"
 
-int reform(char *im, std::vector<uint8_t> &formated, int W, int H, int threshold);
 
-int main(int argc, char *argv[])
-{
-
-    const int W = 128;
-    const int H = 64;
-    uint8_t threshold = 100;
-
-    std::vector<uint8_t> resized(W * H);
-    std::vector<uint8_t> formated(128 * 8, 0);
-    if (argc < 2)
-    {
-        std::cerr << "Usage: " << argv[0] << "image.png\n";
-    }
-
-    // flag check
-    for (int i = 1; i < argc; i++)
-    {
-        if (std::string(argv[i]) == "-th" && i + 1 < argc)
-        {
-            threshold = std::stoi(argv[i + 1]);
-            i++;
-        }
-    }
-
-    if (threshold == 0)
-    {
-        threshold = 90;
-    }
-    //////
-
-    char *scr_img = argv[1];
-    reform(scr_img, formated, W, H, threshold);
-    write(1, formated.data(), formated.size());
-    fflush(stdout);
-    return 0;
-}
 
 int reform(char *im, std::vector<uint8_t> &formated, int W, int H, int threshold)
 {

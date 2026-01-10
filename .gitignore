@@ -4,3 +4,6 @@
 *.png
 PC/bin
 PC/res
+bin
+PC/build/build
+rabbish
