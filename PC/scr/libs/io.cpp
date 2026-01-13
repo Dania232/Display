@@ -24,7 +24,7 @@ void write_to_app(std::vector<uint8_t> &buf){
     write(1, buf.data(), buf.size());
 }
 
-int write_serial(std::vector<uint8_t> &buf)
+int write_to_display(std::vector<uint8_t> &buf)
 {
     const char *port = "/dev/ttyUSB0";
     int fd = open(port, O_RDWR | O_NOCTTY);

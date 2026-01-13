@@ -13,7 +13,7 @@ int main()
         std::cerr << "Not enough data!\n";
     }
 
-    if (write_serial(buffer) != 0)
+    if (write_to_display(buffer) != 0)
     {
         std::cerr << "tty open failed!\n";
     }
