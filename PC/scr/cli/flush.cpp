@@ -1,5 +1,5 @@
 #include "../libs/io.hpp"
-
+#include "../libs/flush.hpp"
 
 int main()
 {

@@ -10,7 +10,7 @@
 
 
 
-int reform(char *im, std::vector<uint8_t> &formated, int W, int H, int threshold)
+int make_monochrom(char *im, std::vector<uint8_t> &formated, int W, int H, int threshold)
 {
     std::vector<uint8_t> resized(W * H);
     int w, h, channels;
