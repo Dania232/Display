@@ -7,6 +7,6 @@
 #include <termios.h>
 #include <sys/ioctl.h>
 
-int read_stdin(std::vector<uint8_t> &buf);
-void write_stdin(std::vector<uint8_t> &buf);
+int read_from_app(std::vector<uint8_t> &buf);
+void write_to_app(std::vector<uint8_t> &buf);
 int write_serial(std::vector<uint8_t> &buf);

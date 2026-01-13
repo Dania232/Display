@@ -41,6 +41,6 @@ int main(int argc, char *argv[])
 
     char *scr_img = argv[1];
     reform(scr_img, formated, W, H, threshold);
-    write_stdin(formated);
+    write_to_app(formated);
     return 0;
 }

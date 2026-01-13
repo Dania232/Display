@@ -11,7 +11,7 @@ int main()
     const int H = 64;
     std::vector<uint8_t> buffer(H * (W / 8));
 
-    read_stdin(buffer);
+    read_from_app(buffer);
 
     print_bitmap(buffer, W, H);
 

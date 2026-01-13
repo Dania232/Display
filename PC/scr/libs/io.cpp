@@ -1,6 +1,6 @@
 #include "io.hpp"
 
-int read_stdin(std::vector<uint8_t> &buf)
+int read_from_app(std::vector<uint8_t> &buf)
 {
     size_t total_read = 0;
     while (total_read < buf.size())
@@ -20,7 +20,7 @@ int read_stdin(std::vector<uint8_t> &buf)
     return 0;
 }
 
-void write_stdin(std::vector<uint8_t> &buf){
+void write_to_app(std::vector<uint8_t> &buf){
     write(1, buf.data(), buf.size());
 }
 
