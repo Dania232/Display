@@ -4,6 +4,7 @@
 
 #include "IFlushFn.hpp"
 #include "IRemapFn.hpp"
+//#include "ICanvasUpdateGetter.hpp"
 #include "ICanvasImg.hpp"
 
 class Flusher

@@ -6,6 +6,6 @@ class ICanvasImg
 {
 
 public:
-    virtual void setImg(const std::vector<uint8_t> &img) = 0;
-    virtual void getImg(std::vector<uint8_t> &img) const = 0;
+    virtual void setImg(const std::vector<uint8_t> &img){};
+    virtual void getImg(std::vector<uint8_t> &img) const{};
 };

@@ -13,4 +13,4 @@ add_executable(remapimg ../scr/cli/remapimg.cpp ../scr/libs/io.cpp)
 add_executable(show ../scr/cli/show.cpp ../scr/libs/io.cpp)
 
 
-add_executable(app ../scr/app/main.cpp ../scr/app/Canvas.cpp ../scr/app/ICanvasImg.hpp ../scr/app/Flusher.hpp)
+add_executable(app ../scr/app/main.cpp ../scr/app/Canvas.cpp) 
