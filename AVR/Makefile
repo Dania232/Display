@@ -1,6 +1,6 @@
 MCU = atmega328pb
 F_CPU = 16000000UL
-TARGET = bmtry
+TARGET = main
 PORT = /dev/ttyUSB0
 BAUD = 115200
 
@@ -20,8 +20,6 @@ $(TARGET).o: $(TARGET).cpp
 
 $(TARGET).elf: $(TARGET).o Display/disp.o
 	$(CXX) -mmcu=$(MCU) -DF_CPU=$(F_CPU) -o $@ $^
-#$(TARGET).elf: $(TARGET).cpp
-#	$(CXX) -mmcu=$(MCU) -DF_CPU=$(F_CPU) -Os -o $@ $<
 
 $(TARGET).hex: $(TARGET).elf
 	$(OBJCOPY) -O ihex $< $@

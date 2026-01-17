@@ -18,6 +18,8 @@ public:
     Display();
     Display(uint8_t *mem);
 
+    void set_ptr_atStart();
+
     void put_pix(uint16_t col, uint8_t row);
 
     void write_byte(uint8_t byte);

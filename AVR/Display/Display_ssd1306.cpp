@@ -133,6 +133,10 @@ void Display::fill()
     i2c_end();
 }
 
+void Display::set_ptr_atStart(){
+    command(SSD1306_COLUMNADDR, 0, 127);
+    command(SSD1306_PAGEADDR, 0, 7);
+}
 /* command() overloads */
 void Display::command(uint8_t c)
 {
