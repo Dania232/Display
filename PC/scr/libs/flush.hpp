@@ -47,6 +47,10 @@ int write_to_display(std::vector<uint8_t> &buf)
     write(fd, buf.data(), buf.size());
     tcdrain(fd); // wait until transmitted
 
+    uint8_t response = 0;
+    int n = read(fd, &response, 1);
+    //std::cout << response << std::endl;
+
     close(fd);
     return 0;
 }

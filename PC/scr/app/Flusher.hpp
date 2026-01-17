@@ -31,9 +31,9 @@ public:
     {
         while (is_running)
         {
-            std::this_thread::sleep_for(std::chrono::milliseconds(5000));
             this->flushPicture();
         }
+
     }
 
     void flushPicture()
