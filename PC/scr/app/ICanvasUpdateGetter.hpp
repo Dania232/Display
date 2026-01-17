@@ -9,6 +9,6 @@
 class ICanvasUpdateGetter
 {
 public:
-    virtual void setImg(const std::vector<uint8_t> &img);
-    virtual void getImg(std::vector<uint8_t> &img) const;
+    virtual void setImg(const std::vector<uint8_t> &img){};
+    virtual void getImg(std::vector<uint8_t> &img) const{};
 };

@@ -1,11 +1,11 @@
 #pragma once
-
+#include "ICanvasUpdateGetter.hpp"
 #include "ICanvasImg.hpp"
 #include <vector>
 #include <cstdint>
 
 
-class Monochrom128x64Canvas : public ICanvasImg
+class Monochrom128x64Canvas : public ICanvasImg, public ICanvasUpdateGetter
 {
 public:
     static constexpr uint16_t WIDTH  = 128;

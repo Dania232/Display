@@ -22,7 +22,7 @@ int main()
 
     canvas.clear();
 
-    canvas.setPixel(0, 40, true);
+    canvas.setPixel(127, 10, true);
     flusher.flushPicture();
 
     return 0;

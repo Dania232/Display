@@ -4,19 +4,18 @@
 
 #include "IFlushFn.hpp"
 #include "IRemapFn.hpp"
-//#include "ICanvasUpdateGetter.hpp"
-#include "ICanvasImg.hpp"
+#include "ICanvasUpdateGetter.hpp"
 
 class Flusher
 {
 
 public:
-    ICanvasImg *canvas;
+    ICanvasUpdateGetter *canvas;
 
     Flush_fn flush_fn;
     Remap_fn remap_fn;
 
-    Flusher(ICanvasImg *canvas, Flush_fn flush_fn, Remap_fn remap_fn)
+    Flusher(ICanvasUpdateGetter *canvas, Flush_fn flush_fn, Remap_fn remap_fn)
         : canvas(canvas), flush_fn(flush_fn), remap_fn(remap_fn)
     {
     }
