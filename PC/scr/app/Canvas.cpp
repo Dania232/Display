@@ -1,8 +1,10 @@
 #include "Canvas.hpp"
 #include <algorithm>
+#include <thread>
+#include <mutex>
 
 Monochrom128x64Canvas::Monochrom128x64Canvas()
-    : buffer(BUFFER_SIZE, 0)
+    : buffer(BUFFER_SIZE, 0), mtx()
 {
 }
 
@@ -16,6 +18,7 @@ void Monochrom128x64Canvas::setImg(const std::vector<uint8_t> &img)
 
 void Monochrom128x64Canvas::getImg(std::vector<uint8_t> &img) const
 {
+    std::lock_guard<std::mutex> lock(mtx);
     img = buffer;
 }
 
@@ -31,6 +34,7 @@ void Monochrom128x64Canvas::fill()
 
 void Monochrom128x64Canvas::setPixel(uint16_t x, uint16_t y, bool color)
 {
+    std::lock_guard<std::mutex> lock(mtx);
     if (x >= WIDTH || y >= HEIGHT)
         return;
 
@@ -42,7 +46,6 @@ void Monochrom128x64Canvas::setPixel(uint16_t x, uint16_t y, bool color)
     else
         buffer[index] &= ~bit;
 }
-
 
 uint16_t Monochrom128x64Canvas::getWidth()
 {

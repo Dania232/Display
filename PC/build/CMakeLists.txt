@@ -13,4 +13,39 @@ add_executable(remapimg ../scr/cli/remapimg.cpp ../scr/libs/io.cpp)
 add_executable(show ../scr/cli/show.cpp ../scr/libs/io.cpp)
 
 
-add_executable(app ../scr/app/main.cpp ../scr/app/Canvas.cpp) 
+#add_executable(app ../scr/app/main.cpp ../scr/app/Canvas.cpp) 
+
+
+
+
+
+
+
+
+cmake_minimum_required(VERSION 3.10)
+project(MyApp)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Find FLTK
+find_package(FLTK REQUIRED)
+
+# Your sources
+set(SOURCES
+    ../scr/app/main.cpp
+    ../scr/app/Canvas.cpp
+    ../scr/app/UI/UIController.cpp
+    # other sources
+)
+
+# Include directories for your headers
+include_directories(
+    ${FLTK_INCLUDE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}  # for UIController.hpp etc
+)
+
+add_executable(MyApp ${SOURCES})
+
+# Link FLTK
+target_link_libraries(MyApp PRIVATE ${FLTK_LIBRARIES})

@@ -1,17 +1,18 @@
 #pragma once
 #include "ICanvasImg.hpp"
+#include "UI/ISLManager.hpp"
 
-
-class SLManager
+class SLManager : public ISLManager
 {
 
 public:
     ICanvasImg *canvas;
 
-    SLManager(ICanvasImg *canvas){
+    SLManager(ICanvasImg *canvas)
+    {
         this->canvas = canvas;
     }
 
-    void Save();
-    void Load();
+    void Save() override {};
+    void Load() override {};
 };
