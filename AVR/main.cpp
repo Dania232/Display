@@ -2,12 +2,10 @@
 #include <util/delay.h>
 #include "LowLevel/UART.h"
 #include "Display/Display_ssd1306.hpp"
-#include "LowLevel/MCU.h"
 
 int main(void)
 {
     uart_init();
-    MCU_init();
 
     Display display;
     uint16_t l = 1024;
