@@ -47,4 +47,24 @@ void uart_transmit(uint8_t data)
     UDR0 = data; //(*(volatile uint8_t *)(0xC6))
 }
 
+int uart_transmit_bytes(uint8_t *data, uint16_t len){
+    uint8_t *cur_ptr = data;
+    while (cur_ptr != (data + len))
+    {
+        uart_transmit(*cur_ptr);
+        cur_ptr++;
+    }
+    return 0;
+}
+
+int uart_receive_bytes(uint8_t *data, uint16_t len){
+    uint8_t *cur_ptr = data;
+    while (cur_ptr != (data + len))
+    {
+        *cur_ptr = uart_receive();
+        cur_ptr++;
+    }
+    return 0;
+}
+
 #endif
