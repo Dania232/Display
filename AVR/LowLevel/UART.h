@@ -27,14 +27,14 @@ void uart_init(void)
     UCSR0B = (1 << RXEN0) | (1 << TXEN0);
 }
 
-char uart_receive(void)
+void uart_receive(uint8_t *data)
 {
     // Wait for data to be in the receive buffer (RXC0 flag is set)
     while (!(UCSR0A & (1 << RXC0)))
         ;
 
     // Return the data from the UDR0 buffer
-    return UDR0;
+    *data = UDR0;
 }
 
 void uart_transmit(uint8_t data)
@@ -61,10 +61,23 @@ int uart_receive_bytes(uint8_t *data, uint16_t len){
     uint8_t *cur_ptr = data;
     while (cur_ptr != (data + len))
     {
-        *cur_ptr = uart_receive();
+        uart_receive(cur_ptr);
         cur_ptr++;
     }
     return 0;
 }
+
+int uart_receive_timeout(uint8_t *out, uint32_t timeout_cycles)
+{
+    while (timeout_cycles--) {
+        if (UCSR0A & (1 << RXC0)) {
+            *out = UDR0;
+            return 0; // OK
+        }
+    }
+    return -1; // TIMEOUT
+}
+
+
 
 #endif
