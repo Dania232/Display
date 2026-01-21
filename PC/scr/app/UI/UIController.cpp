@@ -1,6 +1,7 @@
 #include "UIController.hpp"
 #include <FL/fl_draw.H>
 #include <iostream>
+#include <fstream>
 
 // --- Виджет для отрисовки канваса ---
 class CanvasWidget : public Fl_Widget
@@ -65,7 +66,6 @@ public:
     }
 };
 
-
 UIController::UIController(IDrawableCanvas &canvas, ISLManager &sl_manager)
     : Fl_Window(600, 400, "Display Controller"), canvas_(canvas), sl_manager_(sl_manager)
 {
@@ -84,8 +84,8 @@ UIController::UIController(IDrawableCanvas &canvas, ISLManager &sl_manager)
     btn_save_ = new Fl_Button(bx, by + 35, 80, 25, "Save");
     btn_save_->callback(cb_save, this);
 
-    btn_load_ = new Fl_Button(bx, by + 70, 80, 25, "Load");
-    btn_load_->callback(cb_load, this);
+    //btn_load_ = new Fl_Button(bx, by + 70, 80, 25, "Load");
+    //btn_load_->callback(cb_load, this);
 
     if (w() < bx + 100)
         size(bx + 100, (ch > 150 ? ch + 20 : 150));
@@ -121,16 +121,85 @@ void UIController::cb_clear(Fl_Widget *w, void *data)
 
 void UIController::cb_save(Fl_Widget *w, void *data)
 {
-    std::cout << "Save pressed" << std::endl;
-}
-
-void UIController::cb_load(Fl_Widget *w, void *data)
-{
     UIController *ui = (UIController *)data;
-    std::cout << "Load pressed" << std::endl;
-    ui->canvas_view_->redraw();
+
+    std::vector<uint8_t> img;
+    ui->canvas_.getImg(img); // Получаем данные
+
+    // ПРОВЕРКА ФОРМАТА 128x64
+    // 128 * 64 бит = 8192 бит = 1024 байта
+    const size_t REQUIRED_SIZE = 1024;
+
+    if (img.size() != REQUIRED_SIZE)
+    {
+        std::cerr << "Error: Canvas buffer size is " << img.size()
+                  << " bytes, but 1024 bytes (128x64) is required." << std::endl;
+        // Можно попробовать сделать resize, если это допустимо:
+        // img.resize(REQUIRED_SIZE, 0);
+        return;
+    }
+
+    std::ofstream out("canvas.bin", std::ios::binary);
+    if (!out)
+    {
+        std::cerr << "Failed to open file for saving!" << std::endl;
+        return;
+    }
+
+    out.write(reinterpret_cast<const char *>(img.data()), img.size());
+    out.close();
+
+    std::cout << "Saved 128x64 image (1024 bytes) to canvas.bin" << std::endl;
 }
 
+// void UIController::cb_load(Fl_Widget *w, void *data)
+// {
+//     UIController *ui = (UIController *)data;
+//     const size_t REQUIRED_SIZE = 1024; // 128 * 64 / 8
+
+//     std::cout << "[Load] Opening canvas.bin..." << std::endl;
+
+//     // 1. Открываем файл. Важно: ios::ate ставит курсор в конец, чтобы проверить размер
+//     std::ifstream in("canvas.bin", std::ios::binary | std::ios::ate);
+
+//     if (!in.is_open())
+//     {
+//         std::cerr << "[Error] File 'canvas.bin' not found!" << std::endl;
+//         return;
+//     }
+
+//     // 2. Проверяем размер файла
+//     std::streamsize fileSize = in.tellg();
+//     if (fileSize != REQUIRED_SIZE)
+//     {
+//         std::cerr << "[Error] File size mismatch! Got " << fileSize
+//                   << " bytes, expected " << REQUIRED_SIZE << " bytes." << std::endl;
+//         in.close();
+//         return;
+//     }
+
+//     // 3. Возвращаемся в начало и читаем
+//     in.seekg(0, std::ios::beg);
+
+//     std::vector<uint8_t> img(REQUIRED_SIZE);
+
+//     // Используем read(), а не итераторы, это надежнее для бинарников
+//     if (in.read(reinterpret_cast<char *>(img.data()), REQUIRED_SIZE))
+//     {
+//         // 4. Загружаем в канвас
+//         ui->canvas_.setImg(img);
+
+//         // 5. Обновляем UI
+//         ui->canvas_view_->redraw();
+
+//         std::cout << "[Load] Success! Loaded " << img.size() << " bytes." << std::endl;
+//     }
+//     else
+//     {
+//         std::cerr << "[Error] Failed to read data stream." << std::endl;
+//     }
+//     in.close();
+// }
 
 int UIController::Update()
 {
@@ -144,4 +213,3 @@ void UIController::RefreshCanvas()
         canvas_view_->redraw();
     }
 }
-

@@ -26,7 +26,7 @@ private:
     CanvasWidget *canvas_view_;
     Fl_Button *btn_clear_;
     Fl_Button *btn_save_;
-    Fl_Button *btn_load_;
+    //Fl_Button *btn_load_;
 
     static void cb_clear(Fl_Widget *, void *);
     static void cb_save(Fl_Widget *, void *);

@@ -10,6 +10,7 @@ Monochrom128x64Canvas::Monochrom128x64Canvas()
 
 void Monochrom128x64Canvas::setImg(const std::vector<uint8_t> &img)
 {
+    std::lock_guard<std::mutex> lock(mtx);
     if (img.size() == BUFFER_SIZE)
     {
         buffer = img;
