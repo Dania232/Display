@@ -7,19 +7,31 @@
 #include "SLManager.hpp"
 #include "UI/UIController.hpp"
 
+#include "../../../Shared/Protocol.hpp"
 #include "../libs/flush.hpp"
+#include "../libs/DisplayConnection.hpp"
 #include "../libs/remapimg.hpp"
 
 int main()
 {
-
     Monochrom128x64Canvas canvas;
-
     SLManager sl_manager(&canvas);
+    UIController ui(canvas, sl_manager);
+
+    
+
+    auto flush_fun = [](std::vector<uint8_t> &buf){
+        DisplayConnection dc;
+        Protocol pr(&dc);
+        pr.send_packet(Protocol::PKT_IMAGE, buf.data(), buf.size());
+        return 0;
+    };
+
+
     auto remap_fun = [](std::vector<uint8_t> &vec)
     { remap_display_bits(vec, 64, 128); };
-    Flusher flusher(&canvas, write_to_display, remap_fun);
-    UIController ui(canvas, sl_manager);
+    Flusher flusher(&canvas, flush_fun, remap_fun);
+    
 
     std::thread thread_for_fl(&Flusher::run, &flusher);
     ui.Run();
@@ -27,8 +39,6 @@ int main()
     flusher.stop();
 
     thread_for_fl.join();
-
-    // canvas.setPixel(127, 63, true);
 
     return 0;
 }

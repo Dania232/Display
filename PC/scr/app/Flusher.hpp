@@ -2,6 +2,7 @@
 #include <vector>
 #include <cstdint>
 #include <atomic>
+#include <thread>
 #include "IFlushFn.hpp"
 #include "IRemapFn.hpp"
 #include "ICanvasUpdateGetter.hpp"
@@ -32,6 +33,7 @@ public:
         while (is_running)
         {
             this->flushPicture();
+            std::this_thread::sleep_for(std::chrono::milliseconds(200));
         }
 
     }
