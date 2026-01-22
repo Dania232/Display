@@ -1,4 +1,5 @@
-
+#ifndef PROTOCOL
+#define PROTOCOL
 /*
 +--------+------+-------+---------+---------+
 | SYNC   | TYPE | LEN   | PAYLOAD | CHECK   |
@@ -110,3 +111,4 @@ protected:
     ITransporLayer *tl;
 };
 
+#endif
