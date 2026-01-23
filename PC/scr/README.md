@@ -95,6 +95,7 @@ The PC and AVR communicate via a custom packetized protocol defined in Shared/Pr
 Architecture Overview
 
 
+```mermaid
 classDiagram
     class ICanvasImg {
         <<interface>>
