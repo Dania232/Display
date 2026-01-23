@@ -84,3 +84,30 @@ Linux only
 Requires SSD1306 display
 Requires ATMega328PB MCU
 Uses raw binary image transfer
+
+
+
+
+
+
+sequenceDiagram
+    participant User
+    participant UI_Thread
+    participant Canvas_Mutex
+    participant Flusher_Thread
+    participant SerialPort
+
+    loop 60 FPS
+        User->>UI_Thread: Draws Pixel
+        UI_Thread->>Canvas_Mutex: Lock()
+        UI_Thread->>UI_Thread: Update Buffer
+        Canvas_Mutex-->>UI_Thread: Unlock()
+    end
+
+    loop Every 200ms
+        Flusher_Thread->>Canvas_Mutex: Lock()
+        Flusher_Thread->>Flusher_Thread: Copy Buffer
+        Canvas_Mutex-->>Flusher_Thread: Unlock()
+        Flusher_Thread->>Flusher_Thread: Remap Bits
+        Flusher_Thread->>SerialPort: Send Data (Slow)
+    end

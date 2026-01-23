@@ -87,3 +87,49 @@ The PC and AVR communicate via a custom packetized protocol defined in Shared/Pr
     Integrity: XOR Checksum implementation.
 
     Reliability: Stop-and-wait ARQ (Automatic Repeat Request) logic.
+
+
+
+
+
+Architecture Overview
+
+
+classDiagram
+    class ICanvasImg {
+        <<interface>>
+        +setImg()
+        +getImg()
+    }
+    class ICanvasUpdateGetter {
+        <<interface>>
+    }
+    class IDrawableCanvas {
+        <<interface>>
+        +setPixel()
+    }
+
+    class Monochrom128x64Canvas {
+        -buffer: vector
+        -mutex: mtx
+        +setPixel()
+        +clear()
+    }
+
+    class UIController {
+        -canvas: IDrawableCanvas
+        +Run()
+    }
+
+    class Flusher {
+        -canvas: ICanvasUpdateGetter
+        +run()
+        +flushPicture()
+    }
+
+    Monochrom128x64Canvas ..|> ICanvasImg
+    Monochrom128x64Canvas ..|> ICanvasUpdateGetter
+    Monochrom128x64Canvas ..|> IDrawableCanvas
+    
+    UIController --> IDrawableCanvas : draws on
+    Flusher --> ICanvasUpdateGetter : reads from
