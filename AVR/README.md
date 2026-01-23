@@ -101,7 +101,7 @@ As this is a study project, several design choices were made for simplicity that
 
 
 
-
+```mermaid
 stateDiagram-v2
     [*] --> WAIT_SYNC_1
     WAIT_SYNC_1 --> WAIT_SYNC_2 : 0xAA received

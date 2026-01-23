@@ -89,7 +89,7 @@ Uses raw binary image transfer
 
 
 
-
+```mermaid
 sequenceDiagram
     participant User
     participant UI_Thread
