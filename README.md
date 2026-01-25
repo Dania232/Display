@@ -1,113 +1,110 @@
 
-Bare-Metal Display Controller System
+# Bare-Metal Display Controller System
 
-This pet project was created to make practical use of an SSD1306 display and an Arduino-compatible MCU, while also implementing the controller software with minimal external libraries, purely for learning purposes.
-The project consists of:
-MCU firmware
-Four command-line utilities
-One small UI application
-Executable files for PC tools are located in ./PC/build/bin/
+A full-stack embedded graphics system built from scratch. It enables image streaming from a Linux PC to an SSD1306 OLED display via a custom UART-to-I2C bridge on an ATMega328PB microcontroller.
 
-Overview
-The system allows sending monochrome 128×64 images from a PC to an SSD1306 display via UART → MCU → I2C.
-Image flow:
-Image → PC tools → UART → MCU → I2C → SSD1306 display
+This project was developed to master low-level communication protocols, system architecture, and bare-metal programming without relying on heavy external abstractions (like Arduino HAL).
 
-Command-Line Tools
-The four command-line applications are designed to be used together via pipes:
-mkmnchrom
-Takes an image file as an argument
-Converts it to raw monochrome binary format
-Output format: row-major, 128×64
-Writes output to standard output (stdout)
-show
-Reads raw image bytes from stdin
-Displays the image in the terminal
-remapimg
-Reads raw image bytes from stdin
-Remaps them to the SSD1306 display memory format
-flush
-Reads image data from stdin
-Sends it to the display via /dev/ttyUSB0
-Example:
+---
+
+## 🏗 System Architecture
+
+The system follows a modular design where the PC handles heavy image processing, and the MCU acts as a high-speed driver.
+
+**Data Flow:**
+`[PNG Image] -> [CLI Tools / GUI] -> (UART) -> [ATMega328PB] -> (I2C) -> [SSD1306 Display]`
+
+![System Diagram](./assets/system_overview.png)
+*(Note: Place your system diagram here if you created one)*
+
+---
+
+## 🛠 PC Software (`./PC`)
+
+The host software is built on the **Unix Philosophy**: small tools that do one thing well, connected by pipes.
+
+### 1. Command-Line Tools ( The Pipeline )
+Designed to be chained together via `stdin`/`stdout`.
+
+| Tool | Description |
+| :--- | :--- |
+| **`mkmnchrom`** | **Image Processor.** Converts standard images (PNG/JPG) to raw monochrome bits (row-major, 128x64). |
+| **`remapimg`** | **Memory Mapper.** Transforms row-major data into the specific page-addressing format required by the SSD1306 controller. |
+| **`flush`** | **Driver.** Reads binary data and manages the Serial/UART transmission to the MCU. |
+| **`show`** | **Debugger.** Renders the raw binary stream directly in the terminal using ASCII art for verification. |
+
+**Usage Example:**
+```bash
+# Convert, remap, and send to hardware in one line:
 ./mkmnchrom image.png | ./remapimg | ./flush
 
-UI Application
-MyApp
-Opens a 128×64 drawing canvas
-Allows drawing with the mouse
-Updates the display in real time
-Can save the image in raw binary row-major format
-Examples:
-./show < canvas.bin
-./remapimg < canvas.bin | ./flush
+# Preview an image in the terminal:
+./mkmnchrom image.png | ./show
 
-MCU Firmware (AVR)
-The ./AVR directory contains:
-Firmware source code
-Makefile for flashing the MCU
-Details
-Target MCU: ATMega328PB
-Communication:
-UART: receives raw image bytes from PC
-I2C: sends data to the display
-Display controller: SSD1306
-Toolchain: avr-g++, avr-libc, make
-Flashing port: /dev/ttyUSB0
-⚠️ The firmware is highly platform-dependent and is intended to compile and run only on ATMega328PB.
+2. GUI Application (MyApp)
 
-PC Software
-The ./PC directory contains PC-side applications.
-Build System
-Uses CMake
-After configuration and build:
-Executables are in ./PC/build/bin/
-Dependencies
-stb_image.h
-stb_image_resize2.h
-FLTK (for UI)
-Linux-only APIs (read, write)
-Access to /dev/ttyUSB0
-Directory Structure
-./PC/libs – external libraries (stb headers)
-./PC/src – source code
-./PC/build – build output
+A real-time drawing dashboard built with FLTK.
 
-Shared Code
-The ./Shared directory contains:
-Protocol definitions
-Transport layer interfaces
-These components are shared between MCU and PC code.
+    Features: Live drawing canvas, save-to-binary, real-time hardware sync.
 
-Notes
-Linux only
-Requires SSD1306 display
-Requires ATMega328PB MCU
-Uses raw binary image transfer
+    Tech: Uses Multithreading (std::thread, std::mutex) to separate the UI loop from the blocking UART transmission.
+
+⚡ Firmware (./AVR)
+
+Bare-metal firmware for the ATMega328PB.
+
+    No Arduino HAL: Direct register manipulation for maximum understanding and efficiency.
+
+    Communication:
+
+        UART: Receives raw packets from PC.
+
+        I2C: High-speed transmission to the SSD1306.
+
+    Architecture: Implements a Finite State Machine (FSM) to parse the custom binary protocol.
+
+    Note: The firmware is highly optimized for the ATMega328PB and requires a specific toolchain (avr-g++, avr-libc, make).
 
 
 
+🚀 Getting Started
+Prerequisites
+
+    OS: Linux (Requires access to /dev/ttyUSB0)
+
+    Hardware: ATMega328PB, SSD1306 OLED Display.
+
+    Software: CMake, FLTK (libfltk1.3-dev), avr-gcc toolchain.
+
+1. Build PC Tools
+Bash
+
+cd PC
+mkdir build && cd build
+cmake ..
+make
+# Executables will be placed in ./bin/
+
+2. Flash Firmware
+Bash
+
+cd AVR
+make flash
+# Ensure your programmer is connected to /dev/ttyUSB0
+
+💡 Key Engineering Concepts Demonstrated
+
+    Unix Pipes: decoupling data generation from data transmission.
+
+    Cross-Platform Architecture: Sharing C++ headers (Shared/) between x86 (PC) and AVR (MCU).
+
+    Concurrency: Thread-safe resource sharing in the GUI application.
+
+    Bitwise Operations: Manual pixel mapping and frame buffer manipulation
+
+## 🔌 Hardware Setup
+
+![Hardware Setup Picture](./assets/HardwareSetupPicture.png)
 
 
-```mermaid
-sequenceDiagram
-    participant User
-    participant UI_Thread
-    participant Canvas_Mutex
-    participant Flusher_Thread
-    participant SerialPort
 
-    loop 60 FPS
-        User->>UI_Thread: Draws Pixel
-        UI_Thread->>Canvas_Mutex: Lock()
-        UI_Thread->>UI_Thread: Update Buffer
-        Canvas_Mutex-->>UI_Thread: Unlock()
-    end
-
-    loop Every 200ms
-        Flusher_Thread->>Canvas_Mutex: Lock()
-        Flusher_Thread->>Flusher_Thread: Copy Buffer
-        Canvas_Mutex-->>Flusher_Thread: Unlock()
-        Flusher_Thread->>Flusher_Thread: Remap Bits
-        Flusher_Thread->>SerialPort: Send Data (Slow)
-    end

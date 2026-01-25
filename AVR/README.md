@@ -100,21 +100,3 @@ As this is a study project, several design choices were made for simplicity that
 
 
 
-
-```mermaid
-stateDiagram-v2
-    [*] --> WAIT_SYNC_1
-    WAIT_SYNC_1 --> WAIT_SYNC_2 : 0xAA received
-    WAIT_SYNC_2 --> READ_TYPE : 0x55 received
-    WAIT_SYNC_2 --> WAIT_SYNC_1 : Error
-    
-    READ_TYPE --> READ_LEN_L
-    READ_LEN_L --> READ_LEN_H
-    READ_LEN_H --> READ_PAYLOAD : Allocate Buffer
-    
-    READ_PAYLOAD --> READ_CHECKSUM : N bytes read
-    READ_CHECKSUM --> PROCESS : Checksum OK
-    READ_CHECKSUM --> WAIT_SYNC_1 : Checksum Fail
-    
-    PROCESS --> SEND_ACK
-    SEND_ACK --> WAIT_SYNC_1
