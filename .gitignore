@@ -2,6 +2,7 @@
 *.elf
 *.hex
 *.png
+!assets/HardwareSetupPicture.png
 PC/bin
 PC/res
 bin
