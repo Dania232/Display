@@ -33,6 +33,10 @@ Designed to be chained together via `stdin`/`stdout`.
 | **`flush`** | **Driver.** Reads binary data and manages the Serial/UART transmission to the MCU. |
 | **`show`** | **Debugger.** Renders the raw binary stream directly in the terminal using ASCII art for verification. |
 
+## 🔌 Hardware Setup
+
+![Hardware Setup Picture](./assets/HardwareSetupPicture.png)
+
 **Usage Example:**
 ```bash
 # Convert, remap, and send to hardware in one line:
@@ -102,9 +106,7 @@ make flash
 
     Bitwise Operations: Manual pixel mapping and frame buffer manipulation
 
-## 🔌 Hardware Setup
 
-![Hardware Setup Picture](./assets/HardwareSetupPicture.png)
 
 
 
