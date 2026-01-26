@@ -78,3 +78,8 @@ cd build
 cmake ..
 make
 
+Protocol 
++--------+------+-------+---------+---------+
+| SYNC   | TYPE | LEN   | PAYLOAD | CHECK   |
++--------+------+-------+---------+---------+
+| 0xAA55 | 1 B  | 2 B   | N bytes | 1 B     |
