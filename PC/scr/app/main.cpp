@@ -19,7 +19,14 @@ int main()
     UIController ui(canvas, sl_manager);
 
     
-
+    /*
+        DisplayConnection is created in every call.
+    In the future, it would be better to refactor
+    the Flusher class so that it accepts objects 
+    rather than function references. This would 
+    avoid creating DisplayConnection and Protocol
+    objects for every call.
+    */
     auto flush_fun = [](std::vector<uint8_t> &buf){
         DisplayConnection dc;
         Protocol pr(&dc);
