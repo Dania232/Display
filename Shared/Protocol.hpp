@@ -22,8 +22,6 @@ public:
     enum PacketType : uint8_t
     {
         PKT_IMAGE = 0x01,
-        PKT_CLEAR = 0x02,
-        PKT_PING = 0x03
     };
     Protocol() {}
     Protocol(ITransporLayer *tl) : tl(tl) {}
