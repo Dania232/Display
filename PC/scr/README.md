@@ -78,19 +78,3 @@ cd build
 cmake ..
 make
 
-Protocol Definition
-
-The PC and AVR communicate via a custom packetized protocol defined in Shared/Protocol.hpp.
-
-    Header: 0xAA 0x55 (Sync)
-
-    Integrity: XOR Checksum implementation.
-
-    Reliability: Stop-and-wait ARQ (Automatic Repeat Request) logic.
-
-
-
-
-
-Architecture Overview
-
