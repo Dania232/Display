@@ -19,6 +19,16 @@ int main(void)
     {
         Protocol::PacketType p;
 
+
+        /*
+            Protocol::recive_packet assumes that the second parameter 
+        is an array to which the data will be 
+        written (which can then be sent to the 
+        display). However, since this CPU has 
+        limited memory, and to make rendering 
+        smoother, sending to the display occurs 
+        within the protocol implementation.
+        */
         if (protocol.recive_packet(p, nullptr, l) == 0)
         {
         }
