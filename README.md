@@ -44,7 +44,7 @@ Designed to be chained together via `stdin`/`stdout`.
 
 # Preview an image in the terminal:
 ./mkmnchrom image.png | ./show
-
+```
 2. GUI Application (MyApp)
 
 A real-time drawing dashboard built with FLTK.
