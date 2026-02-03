@@ -1,43 +1,54 @@
-PC Host Software & Toolchain
+Не сердитесь, я не игнорировал. Прошу прощения, если возникло недопонимание.
 
-This directory contains the control plane for the custom display system. It is built using C++17, CMake, and FLTK. The system is designed with a modular architecture, separating low-level hardware communication from the application logic using abstract interfaces.
-🏗 Architecture Overview
+В прошлом ответе я показал, как этот текст выглядит уже отформатированным (с большими буквами и таблицами). Вероятно, вам нужен был именно исходный код (Raw Markdown), чтобы вы могли просто скопировать его и вставить в свой файл README.md.
+
+Вот готовый текст с разметкой. Скопируйте содержимое блока ниже:
+Markdown
+
+# PC Host Software & Toolchain
+
+This directory contains the control plane for the custom display system. It is built using **C++17**, **CMake**, and **FLTK**. The system is designed with a modular architecture, separating low-level hardware communication from the application logic using abstract interfaces.
+
+---
+
+## 🏗 Architecture Overview
 
 The software is split into three distinct layers:
 
-    Core Libraries (./libs): Reusable components for Serial I/O (termios), image processing (stb_image), and bit-manipulation algorithms.
+* **Core Libraries (`./libs`):** Reusable components for Serial I/O (`termios`), image processing (`stb_image`), and bit-manipulation algorithms.
+* **CLI Tools (`./cli`):** A suite of small, single-purpose utilities designed to follow the Unix Philosophy. They communicate via `stdin`/`stdout` pipes.
+* **GUI Application (`./app`):** An interactive dashboard allowing real-time drawing and hardware control, utilizing multithreading to separate rendering from hardware flushing.
 
-    CLI Tools (./cli): A suite of small, single-purpose utilities designed to follow the Unix Philosophy. They communicate via stdin/stdout pipes.
+---
 
-    GUI Application (./app): An interactive dashboard allowing real-time drawing and hardware control, utilizing multithreading to separate rendering from hardware flushing.
+## Tech Stack
 
-Tech Stack
+* **Language:** C++17
+* **GUI Framework:** FLTK (Fast Light Toolkit)
+* **Build System:** CMake
+* **OS:** Linux (Direct usage of `unistd.h`, `fcntl.h` for serial communication)
 
-    Language: C++17
+---
 
-    GUI Framework: FLTK (Fast Light Toolkit)
-
-    Build System: CMake
-
-    OS: Linux (Direct usage of unistd.h, fcntl.h for serial communication)
-
-🛠 Command Line Tools (The Pipeline)
+## 🛠 Command Line Tools (The Pipeline)
 
 The CLI tools are designed to be chained together. This decouples the source of the image from the transmission logic.
 
-Data Flow: [Image Source] -> [Processing] -> [Remapping] -> [Transmission]
-Tool	Responsibility
-mkmnchrom	Reads a standard image (PNG/JPG), resizes it to 128x64, applies a threshold, and outputs raw bits.
-remapimg	Transforms standard raster data into the specific page-addressing memory layout required by the SSD1306 driver.
-flush	The "Driver" node. Reads the final byte stream and handles the Serial/UART handshake with the microcontroller.
-show	A debug utility that renders the raw binary stream into the terminal using ASCII art.
-Usage Example
+**Data Flow:** `[Image Source] -> [Processing] -> [Remapping] -> [Transmission]`
+
+| Tool | Responsibility |
+| :--- | :--- |
+| **mkmnchrom** | Reads a standard image (PNG/JPG), resizes it to 128x64, applies a threshold, and outputs raw bits. |
+| **remapimg** | Transforms standard raster data into the specific page-addressing memory layout required by the SSD1306 driver. |
+| **flush** | The "Driver" node. Reads the final byte stream and handles the Serial/UART handshake with the microcontroller. |
+| **show** | A debug utility that renders the raw binary stream into the terminal using ASCII art. |
+
+### Usage Example
 
 To take a standard PNG and send it to the hardware:
-Bash
-
+```bash
 ./build/bin/mkmnchrom image.png -th 128 | ./build/bin/remapimg | ./build/bin/flush
-
+```
 To preview the output in the terminal without hardware:
 Bash
 
@@ -57,20 +68,21 @@ Key Implementation Details
         The Solution: A dedicated Flusher worker thread handles transmission.
 
         Synchronization: A std::mutex protects the shared Framebuffer (buffer), ensuring the UI thread (writer) and Flusher thread (reader) do not cause data races.
-    C++
-
-    // Snippet from Canvas.cpp demonstrating thread safety
-    void Monochrom128x64Canvas::setPixel(uint16_t x, uint16_t y, bool color)
-    {
-        std::lock_guard<std::mutex> lock(mtx); // RAII Lock
-        // ... bitwise manipulation ...
-    }
 
     Bitwise Logic: The drawing engine manually calculates byte indices and bit offsets to manipulate the 1-bit color depth buffer efficiently.
 
+C++
+
+// Snippet from Canvas.cpp demonstrating thread safety
+void Monochrom128x64Canvas::setPixel(uint16_t x, uint16_t y, bool color)
+{
+    std::lock_guard<std::mutex> lock(mtx); // RAII Lock
+    // ... bitwise manipulation ...
+}
+
 🔧 Building the Project
 
-Ensure you have CMake and FLTK installed (e.g., sudo apt install libfltk1.3-dev).
+Please make sure you have CMake and FLTK installed (e.g., sudo apt install libfltk1.3-dev).
 Bash
 
 mkdir build
@@ -78,8 +90,13 @@ cd build
 cmake ..
 make
 
-Protocol 
+Protocol
+
+The system uses a custom packet format.
+Plaintext
+
 +--------+------+-------+---------+---------+
-| SYNC   | TYPE | LEN   | PAYLOAD | CHECK   |
+|  SYNC  | TYPE |  LEN  | PAYLOAD |  CHECK  |
 +--------+------+-------+---------+---------+
-| 0xAA55 | 1 B  | 2 B   | N bytes | 1 B     |
+| 0xAA55 |  1 B |  2 B  | N bytes |   1 B   |
++--------+------+-------+---------+---------+
