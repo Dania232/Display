@@ -76,20 +76,21 @@ Prerequisites
 
     Software: CMake, FLTK (libfltk1.3-dev), avr-gcc toolchain.
 
-1. Build PC Tools
-Bash
-
+1. Build PC Tool
+```bash
 cd PC
 mkdir build && cd build
 cmake ..
 make
+```
 Executables will be placed in ./bin/
 
 2. Flash Firmware
-Bash
+```Bash
 
 cd AVR
 make flash
+```
 Ensure your programmer is connected to /dev/ttyUSB0
 
 ## 🔌 Hardware Setup
