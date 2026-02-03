@@ -52,7 +52,7 @@ A real-time drawing dashboard built with FLTK.
 
     Tech: Uses Multithreading (std::thread, std::mutex) to separate the UI loop from the blocking UART transmission.
 
-⚡ Firmware (./AVR)
+## ⚡ Firmware (./AVR)
 
 Bare-metal firmware for the ATMega328PB.
 
@@ -70,7 +70,7 @@ Bare-metal firmware for the ATMega328PB.
 
 
 
-🚀 Getting Started
+## 🚀 Getting Started
 Prerequisites
 
     OS: Linux (Requires access to /dev/ttyUSB0)
@@ -95,7 +95,7 @@ cd AVR
 make flash
 # Ensure your programmer is connected to /dev/ttyUSB0
 
-💡 Key Engineering Concepts Demonstrated
+## 💡 Key Engineering Concepts Demonstrated
 
     Unix Pipes: decoupling data generation from data transmission.
 
