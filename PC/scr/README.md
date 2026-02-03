@@ -71,14 +71,6 @@ Key Implementation Details
 
     Bitwise Logic: The drawing engine manually calculates byte indices and bit offsets to manipulate the 1-bit color depth buffer efficiently.
 
-C++
-
-// Snippet from Canvas.cpp demonstrating thread safety
-void Monochrom128x64Canvas::setPixel(uint16_t x, uint16_t y, bool color)
-{
-    std::lock_guard<std::mutex> lock(mtx); // RAII Lock
-    // ... bitwise manipulation ...
-}
 
 🔧 Building the Project
 
@@ -93,10 +85,11 @@ make
 Protocol
 
 The system uses a custom packet format.
-Plaintext
+```Plaintext
 
 +--------+------+-------+---------+---------+
 |  SYNC  | TYPE |  LEN  | PAYLOAD |  CHECK  |
 +--------+------+-------+---------+---------+
 | 0xAA55 |  1 B |  2 B  | N bytes |   1 B   |
 +--------+------+-------+---------+---------+
+```
