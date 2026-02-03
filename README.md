@@ -32,9 +32,6 @@ Designed to be chained together via `stdin`/`stdout`.
 | **`flush`** | **Driver.** Reads binary data and manages the Serial/UART transmission to the MCU. |
 | **`show`** | **Debugger.** Renders the raw binary stream directly in the terminal using ASCII art for verification. |
 
-## 🔌 Hardware Setup
-
-![Hardware Setup Picture](./assets/HardwareSetupPicture.png)
 
 **Usage Example:**
 ```bash
@@ -44,7 +41,7 @@ Designed to be chained together via `stdin`/`stdout`.
 # Preview an image in the terminal:
 ./mkmnchrom image.png | ./show
 ```
-2. GUI Application (MyApp)
+### 2. GUI Application (MyApp)
 
 A real-time drawing dashboard built with FLTK.
 
@@ -94,6 +91,10 @@ Bash
 cd AVR
 make flash
 # Ensure your programmer is connected to /dev/ttyUSB0
+
+## 🔌 Hardware Setup
+
+![Hardware Setup Picture](./assets/HardwareSetupPicture.png)
 
 ## 💡 Key Engineering Concepts Demonstrated
 
