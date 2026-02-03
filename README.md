@@ -89,7 +89,7 @@ Executables will be placed in ./bin/
 ```Bash
 
 cd AVR
-make flash
+make
 ```
 Ensure your programmer is connected to /dev/ttyUSB0
 
