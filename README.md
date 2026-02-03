@@ -83,14 +83,14 @@ cd PC
 mkdir build && cd build
 cmake ..
 make
-# Executables will be placed in ./bin/
+Executables will be placed in ./bin/
 
 2. Flash Firmware
 Bash
 
 cd AVR
 make flash
-# Ensure your programmer is connected to /dev/ttyUSB0
+Ensure your programmer is connected to /dev/ttyUSB0
 
 ## 🔌 Hardware Setup
 
