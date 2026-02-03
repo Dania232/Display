@@ -15,7 +15,6 @@ The system follows a modular design where the PC handles heavy image processing,
 `[PNG Image] -> [CLI Tools / GUI] -> (UART) -> [ATMega328PB] -> (I2C) -> [SSD1306 Display]`
 
 ![System Diagram](./assets/system_overview.png)
-*(Note: Place your system diagram here if you created one)*
 
 ---
 
