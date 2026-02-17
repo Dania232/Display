@@ -1,17 +1,6 @@
-// cat /dev/ttyUSB0
-//  stty -F /dev/ttyUSB0 9600 raw -echo
-//  stty -F /dev/ttyUSB0 -hupcl
-
-#ifndef MY_UART
-#define MY_UART
-
 #include <avr/io.h>
 #include <avr/interrupt.h>
-#define F_CPU 16000000UL
-#define BAUD 9600
-#define UBRR_VALUE ((F_CPU / (16UL * BAUD)) - 1)
-
-void (*byte_transmited_handler)(uint8_t);
+#include "../inc/uart.h"
 
 void uart_init(void)
 {
@@ -31,7 +20,7 @@ void uart_init(void)
     sei();
 }
 
-void uart_receive(uint8_t *data)
+void uart_receive_blocking(uint8_t *data)
 {
     // Wait for data to be in the receive buffer (RXC0 flag is set)
     while (!(UCSR0A & (1 << RXC0)))
@@ -39,6 +28,30 @@ void uart_receive(uint8_t *data)
 
     // Return the data from the UDR0 buffer
     *data = UDR0;
+}
+
+int uart_receive_timeout(uint8_t *out, uint32_t timeout_cycles)
+{
+    while (timeout_cycles--)
+    {
+        if (UCSR0A & (1 << RXC0))
+        {
+            *out = UDR0;
+            return 0; // OK
+        }
+    }
+    return -1; // TIMEOUT
+}
+
+int uart_receive_bytes_blocking(uint8_t *data, uint16_t len)
+{
+    uint8_t *cur_ptr = data;
+    while (cur_ptr != (data + len))
+    {
+        uart_receive(cur_ptr);
+        cur_ptr++;
+    }
+    return 0;
 }
 
 void uart_transmit(uint8_t data)
@@ -62,30 +75,11 @@ int uart_transmit_bytes(uint8_t *data, uint16_t len)
     return 0;
 }
 
-int uart_receive_bytes(uint8_t *data, uint16_t len)
+ISR(USART0_RX_vect)
 {
-    uint8_t *cur_ptr = data;
-    while (cur_ptr != (data + len))
+    if (byte_transmited_handler != 0)
     {
-        uart_receive(cur_ptr);
-        cur_ptr++;
+        uint8_t data = UDR0;
+        byte_transmited_handler(data);
     }
-    return 0;
 }
-
-int uart_receive_timeout(uint8_t *out, uint32_t timeout_cycles)
-{
-    while (timeout_cycles--)
-    {
-        if (UCSR0A & (1 << RXC0))
-        {
-            *out = UDR0;
-            return 0; // OK
-        }
-    }
-    return -1; // TIMEOUT
-}
-
-
-
-#endif
