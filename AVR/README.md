@@ -4,6 +4,7 @@ AVR Firmware: SSD1306 Display Controller
 This directory contains the bare-metal C++ firmware for the ATmega328PB microcontroller. The firmware acts as a bridge, receiving graphical data via UART from a PC and rendering it to an OLED display via I2C.
 
 This project demonstrates low-level driver implementation, custom protocol parsing using a Finite State Machine (FSM), and Object-Oriented design in an embedded environment without relying on the Arduino HAL.
+
 📂 Project Structure
 
 ----
@@ -47,6 +48,7 @@ This project uses avr-g++ and make.
     make flash
 
 (Note: Ensure the programmer path in Makefile matches your system, e.g., /dev/ttyUSB0)
+
 🧐 Critical Analysis & Future Improvements
 
 ----
