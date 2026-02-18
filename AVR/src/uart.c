@@ -2,8 +2,11 @@
 #include <avr/interrupt.h>
 #include "../inc/uart.h"
 
-void uart_init(void)
+void (*byte_recived_callback)(uint8_t);
+
+void uart_init(void (*_uart_byte_recived_callback)(uint8_t))
 {
+    byte_recived_callback = _uart_byte_recived_callback;
     // 1. Set the Baud Rate
     UBRR0H = (uint8_t)(UBRR_VALUE >> 8); // Set high byte
     UBRR0L = (uint8_t)(UBRR_VALUE);      // Set low byte
@@ -48,7 +51,7 @@ int uart_receive_bytes_blocking(uint8_t *data, uint16_t len)
     uint8_t *cur_ptr = data;
     while (cur_ptr != (data + len))
     {
-        uart_receive(cur_ptr);
+        uart_receive_blocking(cur_ptr);
         cur_ptr++;
     }
     return 0;

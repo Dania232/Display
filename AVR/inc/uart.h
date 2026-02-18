@@ -9,9 +9,7 @@
 #define BAUD 9600
 #define UBRR_VALUE ((F_CPU / (16UL * BAUD)) - 1)
 
-void (*byte_recived_callback)(uint8_t);
-
-void uart_init(void);
+void uart_init(void (*_byte_recived_callback)(uint8_t));
 
 void uart_receive_blocking(uint8_t *data);
 int uart_receive_timeout(uint8_t *out, uint32_t timeout_cycles);
