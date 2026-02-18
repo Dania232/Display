@@ -27,9 +27,9 @@ typedef struct
     uint8_t checksum;
     uint8_t pack_type;
     uint16_t data_len;
-    uint8_t data_index;
+    uint16_t data_index;
 } FSM;
 
 
 void fsm_init();
-void fsm_step(FSM *fsm, uint8_t byte);
+uint8_t fsm_step(FSM *fsm, uint8_t byte);
