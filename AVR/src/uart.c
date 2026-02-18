@@ -77,9 +77,9 @@ int uart_transmit_bytes(uint8_t *data, uint16_t len)
 
 ISR(USART0_RX_vect)
 {
-    if (byte_transmited_handler != 0)
+    if (byte_recived_callback != 0)
     {
         uint8_t data = UDR0;
-        byte_transmited_handler(data);
+        byte_recived_callback(data);
     }
 }

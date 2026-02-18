@@ -61,55 +61,55 @@ void disp_init()
 void disp_write_byte(uint8_t byte)
 {
     i2c_begin(SSD1306_ADDR);
-    i2c_write_byte(ctrDataComing);
-    i2c_write_byte(byte);
+    i2c_write(ctrDataComing);
+    i2c_write(byte);
     i2c_end();
 }
 
 void disp_clear()
 {
     i2c_begin(SSD1306_ADDR);
-    i2c_write_byte(ctrDataOnlyComing);
+    i2c_write(ctrDataOnlyComing);
     for (uint16_t i = 0; i < 1024; i++)
-        i2c_write_byte(0x00);
+        i2c_write(0x00);
     i2c_end();
 }
 
 void disp_fill()
 {
     i2c_begin(SSD1306_ADDR);
-    i2c_write_byte(ctrDataOnlyComing);
+    i2c_write(ctrDataOnlyComing);
     for (uint16_t i = 0; i < 1024; i++)
-        i2c_write_byte(0xFF);
+        i2c_write(0xFF);
     i2c_end();
 }
 
 void disp_command(uint8_t c)
 {
     i2c_begin(SSD1306_ADDR);
-    i2c_write_byte(ctrCommandComing);
-    i2c_write_byte(c);
+    i2c_write(ctrCommandComing);
+    i2c_write(c);
     i2c_end();
 }
 
 void disp_command_op(uint8_t c, uint8_t op)
 {
     i2c_begin(SSD1306_ADDR);
-    i2c_write_byte(ctrCommandComing);
-    i2c_write_byte(c);
-    i2c_write_byte(ctrCommandComing);
-    i2c_write_byte(op);
+    i2c_write(ctrCommandComing);
+    i2c_write(c);
+    i2c_write(ctrCommandComing);
+    i2c_write(op);
     i2c_end();
 }
 
 void disp_command_2op(uint8_t c, uint8_t op1, uint8_t op2)
 {
     i2c_begin(SSD1306_ADDR);
-    i2c_write_byte(ctrCommandComing);
-    i2c_write_byte(c);
-    i2c_write_byte(ctrCommandComing);
-    i2c_write_byte(op1);
-    i2c_write_byte(ctrCommandComing);
-    i2c_write_byte(op2);
+    i2c_write(ctrCommandComing);
+    i2c_write(c);
+    i2c_write(ctrCommandComing);
+    i2c_write(op1);
+    i2c_write(ctrCommandComing);
+    i2c_write(op2);
     i2c_end();
 }

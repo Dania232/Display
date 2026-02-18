@@ -35,7 +35,7 @@ void i2c_init(uint16_t freq_khz)
  * @param addr 7-bit device address.
  * @return I2C_OK, I2C_TIMEOUT, I2C_NACK, or I2C_BUS_ERROR.
  */
-i2c_status_t i2c_start(uint8_t addr)
+i2c_status_t i2c_begin(uint8_t addr)
 {
     // 1. Send START condition
     TWCR0 = (1 << TWINT) | (1 << TWSTA) | (1 << TWEN);
@@ -82,7 +82,7 @@ i2c_status_t i2c_write(uint8_t data)
 /**
  * @brief Sends I2C STOP condition.
  */
-void i2c_stop(void)
+void i2c_end(void)
 {
     TWCR0 = (1 << TWINT) | (1 << TWSTO) | (1 << TWEN);
     // Wait for the STOP condition to be executed on the bus

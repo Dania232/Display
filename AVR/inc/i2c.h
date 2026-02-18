@@ -11,8 +11,8 @@ typedef enum {
 } i2c_status_t;
 
 void i2c_init(uint16_t freq_khz);
-i2c_status_t i2c_start(uint8_t addr);
+i2c_status_t i2c_begin(uint8_t addr);
 i2c_status_t i2c_write(uint8_t data);
-void i2c_stop(void);
+void i2c_end(void);
 
 #endif
