@@ -6,9 +6,6 @@
 
 #define SSD1306_ADDR 0x3C
 
-static uint8_t ctrCommandComing = 0x80;
-static uint8_t ctrDataComing = 0xC0;
-static uint8_t ctrDataOnlyComing = 0x40;
 
 void disp_init();
 
@@ -23,5 +20,7 @@ void disp_command(uint8_t c);
 void disp_command_op(uint8_t c, uint8_t op);
 
 void disp_command_2op(uint8_t c, uint8_t op1, uint8_t op2);
+
+void disp_set_ptr_atStart();
 
 #endif

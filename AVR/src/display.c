@@ -2,7 +2,13 @@
 #include <avr/io.h>
 #include "../inc/display.h"
 #include "../inc/i2c.h"
-#include "ssd1306_commands.h"
+#include "../inc/ssd1306_commands.h"
+
+
+static uint8_t ctrCommandComing = 0x80;
+static uint8_t ctrDataComing = 0xC0;
+static uint8_t ctrDataOnlyComing = 0x40;
+
 
 void disp_init()
 {
@@ -112,4 +118,10 @@ void disp_command_2op(uint8_t c, uint8_t op1, uint8_t op2)
     i2c_write(ctrCommandComing);
     i2c_write(op2);
     i2c_end();
+}
+
+
+void disp_set_ptr_atStart(){
+    disp_command_2op(SSD1306_COLUMNADDR, 0, 127);
+    disp_command_2op(SSD1306_PAGEADDR, 0, 7);
 }
