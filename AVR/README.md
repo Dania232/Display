@@ -4,12 +4,19 @@ Markdown
 
 This directory contains the **bare-metal C++ firmware** for the **ATmega328PB** microcontroller. The firmware acts as a bridge, receiving graphical data via UART from a PC and rendering it to an OLED display via I2C.
 
+<<<<<<< HEAD
 This project demonstrates low-level driver implementation, custom protocol parsing using a **Finite State Machine (FSM)**, and Object-Oriented design in an embedded environment without relying on the Arduino HAL.
 
 ## 📂 Project Structure
+=======
+This project demonstrates low-level driver implementation, custom protocol parsing using a Finite State Machine (FSM), and Object-Oriented design in an embedded environment without relying on the Arduino HAL.
 
-The codebase is organized into logical layers of abstraction:
+📂 Project Structure
+>>>>>>> avrrew
 
+----
+
+<<<<<<< HEAD
 * **`./LowLevel`**: Hardware Abstraction Layer (HAL).
     * Contains direct register manipulations for UART (Asynchronous, 9600 baud, 8N1) and I2C (Master mode, ~100kHz).
     * Implementation depends specifically on the ATmega328PB registers (`TWCR0`, `UBRR0`, etc.).
@@ -34,6 +41,24 @@ The codebase is organized into logical layers of abstraction:
 * **Display:** SSD1306 128x64 OLED.
 
 ## 📡 Communication Protocol
+=======
+
+⚙️ Technical Specifications
+
+    MCU: ATmega328PB (16 MHz External Clock)
+
+    Flash Size: ~2.5KB (approx)
+
+    Communication Interfaces:
+
+        UART: 9600 Baud, Polling-based reception with timeout.
+
+        I2C: Hardware TWI (Two Wire Interface), Standard Mode.
+
+    Display: SSD1306 128x64 OLED.
+
+📡 Communication Protocol
+>>>>>>> avrrew
 
 The firmware implements a custom binary protocol to ensure data integrity. The packet structure is as follows:
 
@@ -57,6 +82,7 @@ make flash
 ```
     Note: Ensure the programmer path in Makefile matches your system (e.g., /dev/ttyUSB0).
 
+<<<<<<< HEAD
 🧐 Critical Analysis & Future Improvements
 
 As this is a study project, several design choices were made for simplicity that would be optimized in a production environment.
@@ -87,3 +113,19 @@ As this is a study project, several design choices were made for simplicity that
     Current State: Baud rates and I2C frequencies are hardcoded in the constructor/init functions.
 
     Improvement: Move configuration to a centralized Config.h or pass configuration structs to the drivers for better portability.
+=======
+    Run the makefile:
+    Bash
+
+    make flash
+
+(Note: Ensure the programmer path in Makefile matches your system, e.g., /dev/ttyUSB0)
+
+🧐 Critical Analysis & Future Improvements
+
+----
+
+
+
+
+>>>>>>> avrrew

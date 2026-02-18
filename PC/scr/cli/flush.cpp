@@ -18,6 +18,10 @@ int main()
     DisplayConnection dc;
     Protocol pr(&dc);
 
-    pr.send_packet(Protocol::PacketType::PKT_IMAGE, buffer.data(), buffer.size());
+    int result = pr.send_packet(Protocol::PacketType::PKT_IMAGE, buffer.data(), buffer.size());
+    if (result == -1){
+        std::cout << "unright ack byte!!!" << std::endl;
+    }
+    
     return 0;
 }
